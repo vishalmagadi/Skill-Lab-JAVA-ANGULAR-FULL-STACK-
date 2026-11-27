@@ -1,4 +1,5 @@
 # Employee Data Management
-Full Stack using Java with Springboot framework - BackEnd  
+Full Stack Using:  
+Java with Springboot framework - BackEnd  
 MySQL - Database  
 Angular - Frontend  
