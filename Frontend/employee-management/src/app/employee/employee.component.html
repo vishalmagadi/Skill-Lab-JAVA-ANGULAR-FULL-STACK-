@@ -1,0 +1,188 @@
+
+<div class="dashboard">
+
+  <header class="header">
+    <div>
+      <h1>Employee Management System</h1>
+      <p>Manage your employee records efficiently</p>
+    </div>
+    <button class="refresh-btn" (click)="getAllEmployees()">
+      ↻ Refresh
+    </button>
+  </header>
+
+  <!-- Employee Count -->
+  <div class="stats">
+    <div class="stat-icon">👥</div>
+    <div>
+      <h2>{{ employees.length }}</h2>
+      <p>Employees</p>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <section class="card">
+    <h2>Search Employee</h2>
+
+    <div class="search-row">
+      <input
+        type="number"
+        placeholder="Enter employee ID"
+        [(ngModel)]="searchId">
+
+      <button class="primary-btn" (click)="searchEmployee()">
+        Search
+      </button>
+
+      <button class="secondary-btn" (click)="getAllEmployees()">
+        View All
+      </button>
+    </div>
+  </section>
+
+  <!-- Update Employee -->
+  <section class="card">
+    <h2>{{ editMode ? 'Update Employee' : 'Add New Employee' }}</h2>
+    <p class="subtitle">
+      Select an employee from the table to edit their information.
+    </p>
+
+    <form #empForm="ngForm"
+      (ngSubmit)="editMode ? updateEmployee() : addEmployee()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Employee ID</label>
+          <input type="number"
+                 name="id"
+                 [(ngModel)]="employee.id">
+        </div>
+
+        <div class="form-group">
+          <label>Employee Name</label>
+          <input type="text"
+                 name="name"
+                 [(ngModel)]="employee.name"
+                 required
+                 minlength="2"
+                 placeholder="Enter name">
+        </div>
+
+        <div class="form-group">
+          <label>Department</label>
+          <input type="text"
+                 name="dept"
+                 [(ngModel)]="employee.dept"
+                 required
+                 placeholder="Enter department">
+        </div>
+
+        <div class="form-group">
+            <label>Age (Minimum 22)</label>
+            <input
+                type="number"
+                name="age"
+                [(ngModel)]="employee.age"
+                required
+                min="22"
+                #age="ngModel"
+                placeholder="Enter age">
+
+            <small class="error-message"
+                *ngIf="age.invalid && age.touched">
+                Age must be at least 22.
+            </small>
+        </div>
+
+        <div class="form-group">
+          <label>Salary</label>
+          <input type="number"
+                 name="salary"
+                 [(ngModel)]="employee.salary"
+                 required
+                 min="0">
+        </div>
+
+      </div>
+
+      <div class="button-group">
+
+        <button type="submit"
+                class="primary-btn"
+                [disabled]="empForm.invalid">
+            {{ editMode ? 'Update Employee' : 'Add Employee' }}
+        </button>
+
+        <button type="button"
+                class="secondary-btn"
+                (click)="resetForm()">
+            Reset
+        </button>
+
+        </div>
+
+    </form>
+  </section>
+
+  <!-- Messages -->
+  <div class="success-message" *ngIf="message">
+    {{ message }}
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Employee Table -->
+  <section class="card">
+
+    <h2>Employee Records</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let emp of employees">
+            <td>{{ emp.id }}</td>
+            <td class="emp-name">{{ emp.name }}</td>
+            <td>
+              <span class="dept">{{ emp.dept }}</span>
+            </td>
+            <td>{{ emp.age }}</td>
+            <td class="salary">₹{{ emp.salary }}</td>
+            <td>
+              <button class="edit-btn"
+                      (click)="editEmployee(emp)">
+                Edit
+              </button>
+
+              <button class="delete-btn"
+                      (click)="deleteEmployee(emp.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="employees.length === 0">
+            <td colspan="6" class="empty">
+              No employees found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</div>
